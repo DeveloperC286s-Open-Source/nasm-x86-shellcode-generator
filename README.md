@@ -56,12 +56,12 @@ However paths can be padded with additional '/'s at any directory interval, with
   </tr>
 </table>
 
-Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows multiple commands to be executed withinininininininin one payload and use the functionality of a bash enviroment. I.E. usage of $PATH so you don't need a commands full path. 
+Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows multiple commands to be executed within one payload and use the functionality of a bash enviroment. I.E. usage of $PATH so you don't need a commands full path. 
 
 <table>
   <tr>
     <th>./Shellcode-Generator.out /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
-    <th>Generated output.c - http://pastebin.com/ttxNpkL8</th>
+    <th>Generated output.c - http://pastebin.com/nvsd1qq3</th>
   </tr>
 </table>
 
