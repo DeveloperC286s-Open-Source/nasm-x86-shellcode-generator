@@ -54,22 +54,36 @@ void setup_pointer_array(FILE* f, int size) {
 void push_string(FILE* f, char* string) {
 	//push hex of each char of the string in reverse order
 	int left = strlen(string);
-	if (left%2 > 0) {//cheaty assembly to push 1 byte without a null byte but with a 00 terminator
-		//load char into ax reg
-		fprintf(f, "\"\\xb0\\x%x\" //movb al, '%c'\n", string[left-1], string[left-1]);
-		//push ax, xor eax
-		fprintf(f, "\"\\x66\\x50\" //pushw ax\n \"\\x31\\xc0\" //xor eax, eax\n");
-		left = left - 1;
-	} else {//not needed as pushing the 1 char has a 00 terminator
+    
+    //if the string isnt a multiple of 4, push enough bites to make whats left mutliple of 4.
+    if (left%4 != 0) {
+        //if odd i.e 1 or 3 in length
+        int pushEAX = 1; 
+        if (left%2 != 0) {
+            //cheaty assembly to push 1 byte without a null byte but with a 00 terminator
+            //load char into ax reg
+            fprintf(f, "\"\\xb0\\x%x\" //movb al, '%c'\n", string[left-1], string[left-1]);
+            //push ax, xor eax
+            fprintf(f, "\"\\x50\" //push eax\n\"\\x31\\xc0\" //xor eax, eax\n");
+            left = left - 1;
+            pushEAX = 0;
+        } 
+        //push 2 bytes
+        if (left%4 == 2) {
+            //only need the push eax for the null if didnt push 1 byte
+            if (pushEAX) {
+                fprintf(f, "\"\\x50\" //push eax\n");
+            }
+            fprintf(f, "\"\\x66\\x68\\x%x\\x%x\" //pushw '%c%c'\n", string[left-2], string[left-1], string[left-2], string[left-1]);
+            left = left - 2;
+        }
+    } else {//not needed as pushing the 1 char has a 00 terminator
         //push eax for null byte to show end of string
         fprintf(f, "\"\\x50\" //push eax\n");
     }   
-	while ( left/4 > 0 ) {
+
+    while ( left/4 > 0 ) {
 		fprintf(f, "\"\\x68\\x%x\\x%x\\x%x\\x%x\" //push '%c%c%c%c'\n", string[left-4], string[left-3], string[left-2], string[left-1], string[left-4], string[left-3], string[left-2], string[left-1]);
 		left = left - 4;
-	}
-	if ( left/2 > 0 ) {
-		fprintf(f, "\"\\x66\\x68\\x%x\\x%x\" //pushw '%c%c'\n", string[left-2], string[left-1], string[left-2], string[left-1]);
-		left = left - 2;
 	}
 }
