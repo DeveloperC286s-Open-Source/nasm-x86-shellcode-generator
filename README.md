@@ -37,31 +37,45 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 
 Because of the techiques used to push strings whose length is not a multiple of four strings with no null bytes, the shellcode to push a non multiple can be larger than the shellcode to push a larger strings which is a multiple of four. Strings can be padded so as to not affect the behaviour but make them a multiple of four.
 
-Below is an example to generate shellcode to call /usr/bin/whoami. Running './build.sh' to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As '/usr/bin/whoami' is 15 characters in length some techiques have to be used to push the non multiple.
+Below is an example to generate shellcode to call '/usr/bin/whoami'. Running './build.sh' to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As '/usr/bin/whoami' is 15 characters in length some techiques have to be used to push the non multiple.
 <table>
   <tr>
-    <th>./Shellcode-Generator.out /usr/bin/whoami;</th>
-    <th>Generated output.c - pastebin.com/VjPrTH5B</th>
+    <th>./Shellcode-Generator.out /usr/bin/whoami</th>
+    <th>Generated output.c - http://pastebin.com/VjPrTH5B</th>
   </tr>
 </table>
 
-However full paths can be padded with additional '/'s at the start without affecting the path. In the example below one addition '/' is added to get the length to 16. As we can now see even though the string length has increased the shellcode bytesize has recuded by 3 bytes, around an 8% reduction. 
+However paths can be padded with additional '/'s at any directory interval, without affecting the path. In the example below one addition '/' is added to the begining to get the length to 16. As we can now see even though the string length has increased the shellcode bytesize has recuded by 3 bytes, around an 8% reduction. 
+
+'//usr/bin/whoami' could be '/usr//bin/whoami' or '/usr/bin//whoami'. Also the number of '/'s don't affect the path. But only one was needed in this case to get to the optimal multiple of four, anymore than 1 would start to increase the shellcode size instead of decreasing it.
 
 <table>
   <tr>
-    <th>./Shellcode-Generator.out //usr/bin/whoami;</th>
-    <th>Generated output.c - pastebin.com/6s9XAM8E</th>
+    <th>./Shellcode-Generator.out //usr/bin/whoami</th>
+    <th>Generated output.c - http://pastebin.com/6s9XAM8E</th>
+  </tr>
+</table>
+
+Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows multiple commands to be executed withinininininininin one payload and use the functionality of a bash enviroment. I.E. usage of $PATH so you don't need a commands full path. 
+
+<table>
+  <tr>
+    <th>./Shellcode-Generator.out /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
+    <th>Generated output.c - http://pastebin.com/ttxNpkL8</th>
+  </tr>
+</table>
+
+The above example can be optimised. '/bin/bash' is 9 characters in length we could pad it with 3 '/'s to 12 a multiple of 4. But doing that produces longer shellcode than leaving it as '/bin/bash'. Spaces inside the command can be removed shortening the string length without affecting the command. Removing the spaces reduce it to 92 bytes in length, instead of the prior length of 97 bytes.
+
+
+<table>
+  <tr>
+    <th>./Shellcode-Generator.out /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
+    <th>Generated output.c - http://pastebin.com/eYhA7iHg</th>
   </tr>
 </table>
 
 
-
-<table>
-  <tr>
-    <th>./Shellcode-Generator.out /bin/bash -c "echo test > test.txt;ls;cat test.txt"</th>
-    <th>Generated output.c - https://i.imgur.com/um2wvvD.png</th>
-  </tr>
-</table>
 
 ## Recommended Resources
 <ul>
