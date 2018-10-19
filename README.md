@@ -33,12 +33,30 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
   <li><b>./build.sh</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputed binary to prove the functionality of the shellcode.</li>  
 </ol>
 
-## Example Usage
+## Example Usage and Tips
+
+Because of the techiques used to push strings whose length is not a multiple of four strings with no null bytes, the shellcode to push a non multiple can be larger than the shellcode to push a larger strings which is a multiple of four. Strings can be padded so as to not affect the behaviour but make them a multiple of four.
+
+Below is an example to generate shellcode to call /usr/bin/whoami. Running './build.sh' to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As '/usr/bin/whoami' is 15 characters in length some techiques have to be used to push the non multiple.
 <table>
   <tr>
-    <th>./Shellcode-Generator.out /usr/bin/whoami</th>
-    <th>Generated output.c - https://i.imgur.com/NiRigX0.png</th>
+    <th>./Shellcode-Generator.out /usr/bin/whoami;</th>
+    <th>Generated output.c - pastebin.com/VjPrTH5B</th>
   </tr>
+</table>
+
+However full paths can be padded with additional '/'s at the start without affecting the path. In the example below one addition '/' is added to get the length to 16. As we can now see even though the string length has increased the shellcode bytesize has recuded by 3 bytes, around an 8% reduction. 
+
+<table>
+  <tr>
+    <th>./Shellcode-Generator.out //usr/bin/whoami;</th>
+    <th>Generated output.c - pastebin.com/6s9XAM8E</th>
+  </tr>
+</table>
+
+
+
+<table>
   <tr>
     <th>./Shellcode-Generator.out /bin/bash -c "echo test > test.txt;ls;cat test.txt"</th>
     <th>Generated output.c - https://i.imgur.com/um2wvvD.png</th>
