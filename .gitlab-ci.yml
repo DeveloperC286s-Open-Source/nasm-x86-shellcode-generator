@@ -1,0 +1,14 @@
+image: archlinux/base
+
+stages:
+    - build
+
+build:
+    stage: build
+    before_script:
+        - pacman -Sy --noconfirm
+        - pacman -S base-devel --noconfirm
+        - pacman -S lib32-gcc-libs lib32-glibc --noconfirm 
+    script:
+        - gcc Shellcode-Generator.c -o Shellcode-Generator.out
+
