@@ -9,7 +9,7 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
   <li>The payload can include commands which can't be called natively through a system call in assembly.</li>
   <li>Faster and less error-prone than handcrafting shellcode.</li>
   <li>Generates shellcode for lengthy/complex bash which would be difficult to do by hand.</li>
-  <li>Through the use of <b>./Shellcode-Generator.out /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.</li>
+  <li>Through the use of <b>./Shellcode-Generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.</li>
 </ul>
 
 ## Limations
@@ -20,17 +20,15 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 ## Installation
 
 <ul>
-  <li>Ubuntu: <b>apt-get install gcc</b> - Needed to be able to compile C programs.</li>
-  <li>Arch: <b>pacman -Sy gcc</b></li>
-  <li>Ubuntu: <b>apt-get install libc6-dev-i386</b> - Needed to be able to compile in 32bit architecture in gcc.</li>
-  <li>Arch: <b>pacman -Sy lib32-gcc-libs lib32-glibc</b></li>
-  <li><b>gcc Shellcode-Generator.c -o Shellcode-Generator.out</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to Shellcode-Generator.out.</li>
+  <li>Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.</li>
+  <li>Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.</li>  
+  <li><b>make compile</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to 'Shellcode-Generator'.</li>
 </ul>
 
 ## Usage
 <ol>
-  <li><b>./Shellcode-Generator.out <- desired command -> <- arguments -></b> Invokes the generator which takes the provide bash commmand and arguments and generates the corresponding shellcode, outputing the result to output.c.</li>
-  <li><b>./build.sh</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputed binary to prove the functionality of the shellcode.</li>  
+  <li><b>./Shellcode-Generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide bash commmand and arguments and generates the corresponding shellcode, outputing the result to output.c.</li>
+  <li><b>make payload</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputed binary to prove the functionality of the shellcode.</li>  
 </ol>
 
 ## Example Usage and Tips
@@ -40,7 +38,7 @@ Because of the techiques used to push strings whose length is not a multiple of 
 Below is an example to generate shellcode to call '/usr/bin/whoami'. Running './build.sh' to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As '/usr/bin/whoami' is 15 characters in length some techiques have to be used to push the non multiple.
 <table>
   <tr>
-    <th>./Shellcode-Generator.out /usr/bin/whoami</th>
+    <th>./Shellcode-Generator /usr/bin/whoami</th>
     <th>Generated output.c - http://pastebin.com/VjPrTH5B</th>
   </tr>
 </table>
@@ -51,7 +49,7 @@ However paths can be padded with additional '/'s at any directory interval, with
 
 <table>
   <tr>
-    <th>./Shellcode-Generator.out //usr/bin/whoami</th>
+    <th>./Shellcode-Generator //usr/bin/whoami</th>
     <th>Generated output.c - http://pastebin.com/6s9XAM8E</th>
   </tr>
 </table>
@@ -60,7 +58,7 @@ Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows
 
 <table>
   <tr>
-    <th>./Shellcode-Generator.out /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
+    <th>./Shellcode-Generator /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
     <th>Generated output.c - http://pastebin.com/nvsd1qq3</th>
   </tr>
 </table>
@@ -70,7 +68,7 @@ The above example can be optimised. '/bin/bash' is 9 characters in length we cou
 
 <table>
   <tr>
-    <th>./Shellcode-Generator.out /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
+    <th>./Shellcode-Generator /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
     <th>Generated output.c - http://pastebin.com/eYhA7iHg</th>
   </tr>
 </table>
