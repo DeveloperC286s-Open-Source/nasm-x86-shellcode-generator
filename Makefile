@@ -3,12 +3,16 @@
 .POSIX:
 
 CC=gcc
+CFLAGS=
+SOURCES=Shellcode-Generator.c
 
-compile:
-	$(CC) Shellcode-Generator.c -o Shellcode-Generator
+all: Shellcode-Generator
+
+Shellcode-Generator: $(SOURCES)
+	$(CC) -o Shellcode-Generator $(SOURCES) $(CFLAGS)
 
 payload:
 	$(CC) -m32 -fno-stack-protector -z execstack output.c -o output
 	./output
 
-.PHONY: compile payload 
+.PHONY: payload 

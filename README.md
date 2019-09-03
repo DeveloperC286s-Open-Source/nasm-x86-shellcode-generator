@@ -1,4 +1,4 @@
-# Linux-86-Shellcode-Generator
+# Linux-x86-Shellcode-Generator
 
 This program provides you with the utility to generate Linux x86 shellcode corresponding to your provided bash command and arguments. The assembly produced pushes the provided bash command and arguments onto the stack and uses them as arguments in an execve system call. The assembly generated uses various tricks to not include any null bytes so that you can use the assembly in a buffer overflow attack. Additionally, there are tricks used to allow odd length commands/parameters without using null bytes and to reduce the shellcode length.
 
@@ -22,7 +22,7 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 <ul>
   <li>Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.</li>
   <li>Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.</li>  
-  <li><b>make compile</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to 'Shellcode-Generator'.</li>
+  <li><b>make</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to 'Shellcode-Generator'.</li>
 </ul>
 
 ## Usage
