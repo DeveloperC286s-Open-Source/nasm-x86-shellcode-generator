@@ -10,6 +10,7 @@ build:
         - pacman -S base-devel --noconfirm
         - pacman -S lib32-gcc-libs lib32-glibc --noconfirm 
         - pacman -S make --noconfirm
+        - pacman -S cunit --noconfirm
     script:
         - make
 
