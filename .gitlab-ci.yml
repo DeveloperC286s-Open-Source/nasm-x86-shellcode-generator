@@ -1,11 +1,12 @@
 image: archlinux/base
 
 stages:
+    - install_dependencies
     - build
     - test
 
-install_depencies:
-    stage: build
+install_dependencies:
+    stage: install_dependencies 
     script:
         - pacman -Sy --noconfirm
         - pacman -S base-devel --noconfirm
