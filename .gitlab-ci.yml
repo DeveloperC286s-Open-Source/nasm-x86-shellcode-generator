@@ -2,15 +2,24 @@ image: archlinux/base
 
 stages:
     - build
+    - test
 
-build:
+install_depencies:
     stage: build
-    before_script:
+    script:
         - pacman -Sy --noconfirm
         - pacman -S base-devel --noconfirm
         - pacman -S lib32-gcc-libs lib32-glibc --noconfirm 
         - pacman -S make --noconfirm
         - pacman -S cunit --noconfirm
+
+build:
+    stage: build
     script:
         - make
+
+test:
+    stage: test
+    script:
+        - make test
 

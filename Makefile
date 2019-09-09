@@ -17,7 +17,7 @@ PAYLOAD_OBJECT=output
 PAYLOAD_CFLAGS=-m32 -fno-stack-protector -z execstack
 
 .PHONY: all
-all: $(OBJECT) test
+all: $(OBJECT)
 
 $(OBJECT): $(SOURCE)
 	$(CC) -o $(OBJECT) $(SOURCE) $(CFLAGS)

@@ -25,6 +25,16 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
   <li><b>make</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to 'Shellcode-Generator'.</li>
 </ul>
 
+## CUnit Tests
+
+In order to execute the unit tests using the CUnit framework you will need to install CUnit.
+
+<ul>
+  <li>Ubuntu: <b>apt-get install libcunit1-dev</b> - Needed to be able to compile CUnit framework tests.</li>
+  <li>Arch: <b>pacman -Sy cunit</b> - Needed to be able to compile CUnit framework tests.</li>  
+  <li><b>make test</b> - Compiles the CUnit tests and runs then, printing the results to the terminal.</li>
+</ul>
+
 ## Usage
 <ol>
   <li><b>./Shellcode-Generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide bash commmand and arguments and generates the corresponding shellcode, outputing the result to output.c.</li>
