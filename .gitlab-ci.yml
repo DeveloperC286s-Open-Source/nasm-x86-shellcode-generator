@@ -15,6 +15,6 @@ build:
         - make
         - make test
     artifacts:
-  		paths:
-    		- shellcode-generator 
-    		- Makefile
+        paths:
+            - shellcode-generator
+            - Makefile
