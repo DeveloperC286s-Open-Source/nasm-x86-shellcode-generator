@@ -8,9 +8,8 @@ stages:
 format:
     stage: format 
     before_script:
-        - pacman -Sy --noconfirm
-        - pacman -S gawk grep --noconfirm
-        - pacman -S clang diffutils --noconfirm
+        - pacman -Sy --noconfirm 
+        - pacman -S clang diffutils gawk grep --noconfirm
     script:
         - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
         - clang-format $i > temp.txt
@@ -21,7 +20,7 @@ warnings:
     stage: warnings 
     before_script:
         - pacman -Sy --noconfirm 
-        - pacman -S clang --noconfirm
+        - pacman -S clang gawk grep --noconfirm
     script:
         - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
         - clang-tidy $i --checks="*" --warnings-as-errors="*" 
