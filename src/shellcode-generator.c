@@ -4,11 +4,11 @@
 #include <string.h>
 
 void setup_pointer_array(FILE *f, int size);
-void push_string(FILE *f, char *shellcode);
+void push_string(FILE *f, char *string);
 
 int main(int argc, char *argv[]) {
   if (argc > 1) {
-    FILE *f = fopen("output.c", "w");
+    FILE *f = fopen("output.c", "we");
     // write to the file the C imports and setup the char* container
     fprintf(f,
             "#include <string.h>\n#include <stdio.h>\n#include "
