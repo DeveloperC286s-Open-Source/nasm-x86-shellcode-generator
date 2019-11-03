@@ -71,7 +71,7 @@ void setup_pointer_array(FILE *f, int size) {
 
 void push_string(FILE *f, char *string) {
   // push hex of each char of the string in reverse order
-  int left = strlen(string);
+  unsigned long left = strlen(string);
 
   // if the string isnt a multiple of 4, push enough bites to make whats left
   // mutliple of 4.
