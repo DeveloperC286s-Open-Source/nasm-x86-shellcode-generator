@@ -57,9 +57,9 @@ int main(int argc, char *argv[]) {
 
 void setup_pointer_array(FILE *f, int size) {
   // push null pointer arguement, as they will be elements in the array, the
-  // null pointers will be overwritten later with the elements addr after we know
-  // it from pushing them onto the stack extra null pointer at the end to show
-  // the end of the array
+  // null pointers will be overwritten later with the elements addr after we
+  // know it from pushing them onto the stack extra null pointer at the end to
+  // show the end of the array
   int i;
   for (i = 0; i < size; i++) {
     fprintf(f, "\"\\x50\" //push eax\n");
