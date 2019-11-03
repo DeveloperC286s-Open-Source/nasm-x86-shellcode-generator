@@ -24,7 +24,7 @@ warnings:
         - pacman -S clang --noconfirm
     script:
         - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
-        - clang-tidy $i -checks="*"
+        - clang-tidy $i --checks="*" --warnings-as-errors="*" 
         - done
 
 builds:
