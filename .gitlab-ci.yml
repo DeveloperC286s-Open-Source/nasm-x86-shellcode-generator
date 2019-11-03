@@ -1,7 +1,20 @@
 image: archlinux/base
 
 stages:
+    - format
     - build
+
+format:
+    stage: format 
+    before_script:
+        - pacman -Sy --noconfirm
+        - pacman -S base-devel --noconfirm
+        - pacman -S clang diffutils --noconfirm
+    script:
+        - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
+        - clang-format $1 > temp.txt
+        - cmp --silent $i temp.txt
+        - done
 
 build:
     stage: build
@@ -16,5 +29,4 @@ build:
         - make test
     artifacts:
         paths:
-            - shellcode-generator
-            - Makefile
+            - shellcode-generator 
