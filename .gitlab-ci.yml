@@ -4,6 +4,7 @@ stages:
     - format
     - warnings
     - builds
+    - tests
 
 format:
     stage: format 
@@ -30,13 +31,17 @@ builds:
     stage: builds
     before_script:
         - pacman -Sy --noconfirm
-        - pacman -S base-devel --noconfirm
-        - pacman -S lib32-gcc-libs lib32-glibc --noconfirm 
-        - pacman -S make --noconfirm
-        - pacman -S cunit --noconfirm
+        - pacman -S base-devel lib32-gcc-libs lib32-glibc make --noconfirm
     script:
         - make
-        - make test
     artifacts:
         paths:
-            - shellcode-generator 
+            - shellcode-generator
+
+tests:
+    stage: tests 
+    before_script:
+        - pacman -Sy --noconfirm
+        - pacman -S base-devel lib32-gcc-libs lib32-glibc make cunit --noconfirm
+    script: 
+        - make test
