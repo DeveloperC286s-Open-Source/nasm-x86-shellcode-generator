@@ -53,7 +53,7 @@ Below is an example to generate shellcode to call '/usr/bin/whoami'. Running './
   </tr>
 </table>
 
-However paths can be padded with additional '/'s at any directory interval, without affecting the path. In the example below one addition '/' is added to the beginning to get the length to 16. As we can now see even though the string length has increased the shellcode bytesize has reduced by 3 bytes, around an 8% reduction. 
+However paths can be padded with additional '/'s at any directory interval, without affecting the path. In the example below one addition '/' is added to the beginning to get the length to 16. As we can now see even though the string length has increased the shellcode byte size has reduced by 3 bytes, around an 8% reduction. 
 
 '//usr/bin/whoami' could be '/usr//bin/whoami' or '/usr/bin//whoami'. Also the number of '/'s don't affect the path. But only one was needed in this case to get to the optimal multiple of four, anymore than 1 would start to increase the shellcode size instead of decreasing it.
 
