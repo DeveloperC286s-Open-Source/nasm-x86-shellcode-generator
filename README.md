@@ -1,4 +1,4 @@
-# NASM-x86-Shellcode-Generator
+# NASM x86 Shellcode Generator 
 
 This program provides you with the utility to generate NASM x86 shellcode corresponding to your provided Shell/Bash command and arguments. The assembly produced pushes the provided command and arguments onto the stack, then uses them as arguments in an execve system call. The assembly generated uses various tricks not to include any null bytes; so that you can use the NASM generated in a buffer overflow attack. Additionally, there are tricks used to allow odd length commands/arguments, which can not be padded. 
 
