@@ -10,7 +10,7 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
   <li>The payload can include Bash commands which can't be called natively through a system call in assembly.</li>
   <li>Faster and less error-prone than handcrafting shellcode.</li>
   <li>Generates shellcode for lengthy/complex Bash which would be difficult to do by hand.</li>
-  <li>Through the use of <b>./Shellcode-Generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.</li>
+  <li>Through the use of <b>./shellcode-generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.</li>
 </ul>
 
 ## Limitations 
@@ -23,7 +23,7 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 <ul>
   <li>Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.</li>
   <li>Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.</li>  
-  <li><b>make</b> - Compiles the generator 'Shellcode-Generator.c' and outputs the binary to 'Shellcode-Generator'.</li>
+  <li><b>make</b> - Compiles the generator 'shellcode-generator.c' and outputs the binary to 'shellcode-generator'.</li>
 </ul>
 
 ## CUnit Tests
@@ -38,7 +38,7 @@ In order to execute the unit tests using the CUnit framework you will need to in
 
 ## Usage
 <ol>
-  <li><b>./Shellcode-Generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.</li>
+  <li><b>./shellcode-generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.</li>
   <li><b>make payload</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.</li>  
 </ol>
 
@@ -49,7 +49,7 @@ Because of the techniques used to push strings whose length is not a multiple of
 Below is an example to generate shellcode to call '/usr/bin/whoami'. Running './build.sh' to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As '/usr/bin/whoami' is 15 characters in length some techniques have to be used to push the non multiple.
 <table>
   <tr>
-    <th>./Shellcode-Generator /usr/bin/whoami</th>
+    <th>./shellcode-generator /usr/bin/whoami</th>
     <th>Generated output.c - http://pastebin.com/VjPrTH5B</th>
   </tr>
 </table>
@@ -60,7 +60,7 @@ However paths can be padded with additional '/'s at any directory interval, with
 
 <table>
   <tr>
-    <th>./Shellcode-Generator //usr/bin/whoami</th>
+    <th>./shellcode-generator //usr/bin/whoami</th>
     <th>Generated output.c - http://pastebin.com/6s9XAM8E</th>
   </tr>
 </table>
@@ -69,7 +69,7 @@ Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows
 
 <table>
   <tr>
-    <th>./Shellcode-Generator /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
+    <th>./shellcode-generator /bin/bash -c "echo test > test.txt; ls; cat test.txt"</th>
     <th>Generated output.c - http://pastebin.com/nvsd1qq3</th>
   </tr>
 </table>
@@ -79,7 +79,7 @@ The above example can be optimised. '/bin/bash' is 9 characters in length we cou
 
 <table>
   <tr>
-    <th>./Shellcode-Generator /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
+    <th>./shellcode-generator /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
     <th>Generated output.c - http://pastebin.com/eYhA7iHg</th>
   </tr>
 </table>
