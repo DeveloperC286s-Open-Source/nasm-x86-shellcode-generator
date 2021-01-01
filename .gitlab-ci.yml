@@ -1,5 +1,3 @@
-image: archlinux/base
-
 stages:
   - conventional-commits-linting
   - format
@@ -23,6 +21,7 @@ conventional-commits-linting:
 
 format:
   stage: format
+  image: archlinux/base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S clang diffutils gawk grep --noconfirm
@@ -31,10 +30,13 @@ format:
     - clang-format $i > temp.txt
     - cmp $i temp.txt
     - done
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
 
 warnings:
   stage: warnings
+  image: archlinux/base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S clang cunit gawk grep --noconfirm
@@ -42,10 +44,13 @@ warnings:
     - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
     - clang-tidy $i --checks="*" --warnings-as-errors="*"
     - done
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
 
 builds:
   stage: builds
+  image: archlinux/base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S base-devel lib32-gcc-libs lib32-glibc make --noconfirm
@@ -54,12 +59,19 @@ builds:
   artifacts:
     paths:
       - shellcode-generator
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 tests:
   stage: tests
+  image: archlinux/base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S base-devel lib32-gcc-libs lib32-glibc make cunit --noconfirm
   script:
     - make test
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
