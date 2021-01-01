@@ -1,4 +1,3 @@
-// https://gitlab.com/DeveloperC/Linux-x86-Shellcode-Generator
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,8 +25,7 @@ int main(int argc, char *argv[]) {
 
     // push each arg of the desired command onto stack, get the addr and then
     // insert the addr into the argv[] array
-    int i;
-    for (i = 2; i < argc; i++) {
+    for (int i = 2; i < argc; i++) {
       push_string(f, argv[i]);
       // get the addr of the current string just pushed onto stack and then move
       // the addr onto the argv[] array
@@ -60,8 +58,7 @@ void setup_pointer_array(FILE *f, int size) {
   // null pointers will be overwritten later with the elements addr after we
   // know it from pushing them onto the stack extra null pointer at the end to
   // show the end of the array
-  int i;
-  for (i = 0; i < size; i++) {
+  for (int i = 0; i < size; i++) {
     fprintf(f, "\"\\x50\" //push eax\n");
   }
   // push ebx onto the end of the array; as it is the first element of the array
