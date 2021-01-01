@@ -1,10 +1,25 @@
 image: archlinux/base
 
 stages:
+  - conventional-commits-linting
   - format
   - warnings
   - builds
   - tests
+
+
+conventional-commits-linting:
+  stage: conventional-commits-linting
+  image: rust
+  before_script:
+    - cargo install conventional_commits_linter
+  script:
+    - COMMON_ANCESTOR_COMMIT=`git merge-base origin/$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME`
+    # Lint all the commits in the branch.
+    - /usr/local/cargo/bin/conventional_commits_linter --from-commit-hash $COMMON_ANCESTOR_COMMIT --allow-angular-type-only
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+
 
 format:
   stage: format
@@ -17,6 +32,7 @@ format:
     - cmp $i temp.txt
     - done
 
+
 warnings:
   stage: warnings
   before_script:
@@ -26,6 +42,7 @@ warnings:
     - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
     - clang-tidy $i --checks="*" --warnings-as-errors="*"
     - done
+
 
 builds:
   stage: builds
@@ -37,6 +54,7 @@ builds:
   artifacts:
     paths:
       - shellcode-generator
+
 
 tests:
   stage: tests
