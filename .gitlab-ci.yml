@@ -1,47 +1,47 @@
 image: archlinux/base
 
 stages:
-    - format
-    - warnings
-    - builds
-    - tests
+  - format
+  - warnings
+  - builds
+  - tests
 
 format:
-    stage: format 
-    before_script:
-        - pacman -Sy --noconfirm 
-        - pacman -S clang diffutils gawk grep --noconfirm
-    script:
-        - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
-        - clang-format $i > temp.txt
-        - cmp $i temp.txt
-        - done
+  stage: format
+  before_script:
+    - pacman -Sy --noconfirm
+    - pacman -S clang diffutils gawk grep --noconfirm
+  script:
+    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
+    - clang-format $i > temp.txt
+    - cmp $i temp.txt
+    - done
 
 warnings:
-    stage: warnings 
-    before_script:
-        - pacman -Sy --noconfirm 
-        - pacman -S clang cunit gawk grep --noconfirm
-    script:
-        - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
-        - clang-tidy $i --checks="*" --warnings-as-errors="*" 
-        - done
+  stage: warnings
+  before_script:
+    - pacman -Sy --noconfirm
+    - pacman -S clang cunit gawk grep --noconfirm
+  script:
+    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
+    - clang-tidy $i --checks="*" --warnings-as-errors="*"
+    - done
 
 builds:
-    stage: builds
-    before_script:
-        - pacman -Sy --noconfirm
-        - pacman -S base-devel lib32-gcc-libs lib32-glibc make --noconfirm
-    script:
-        - make
-    artifacts:
-        paths:
-            - shellcode-generator
+  stage: builds
+  before_script:
+    - pacman -Sy --noconfirm
+    - pacman -S base-devel lib32-gcc-libs lib32-glibc make --noconfirm
+  script:
+    - make
+  artifacts:
+    paths:
+      - shellcode-generator
 
 tests:
-    stage: tests 
-    before_script:
-        - pacman -Sy --noconfirm
-        - pacman -S base-devel lib32-gcc-libs lib32-glibc make cunit --noconfirm
-    script: 
-        - make test
+  stage: tests
+  before_script:
+    - pacman -Sy --noconfirm
+    - pacman -S base-devel lib32-gcc-libs lib32-glibc make cunit --noconfirm
+  script:
+    - make test
