@@ -1,12 +1,23 @@
 # NASM x86 Shellcode Generator
 [![pipeline status](https://gitlab.com/DeveloperC/nasm-x86-shellcode-generator/badges/master/pipeline.svg)](https://gitlab.com/DeveloperC/nasm-x86-shellcode-generator/commits/master) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![License: AGPL v3](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
+
 This program provides you with the utility to generate NASM x86 shellcode corresponding to your provided Shell/Bash command and arguments. The assembly produced pushes the provided command and arguments onto the stack, then uses them as arguments in an execve system call. The assembly generated uses various tricks not to include any null bytes; so that you can use the NASM generated in a buffer overflow attack. Additionally, there are tricks used to allow odd length commands/arguments, which can not be padded.
 
 Embedded into a char * is the hexadecimal representation of the generated assembly in an outputted proof of concept C file `output.c`. Alongside the hexadecimal representation is the NASM assembly equivalent as comments, to allow you to understand the generated code. You can ensure the generated assembly is functional and correct through compiling and executing the proof of concept C file. The Makefile has the utility `make payload` to compile `output.c` with the relevant flags to allow execution on the stack to prove the correctness.
 
-## Benefits
 
+## Content
+ * [Benefits](#benefits)
+ * [Limitations](#limitations)
+ * [Installation](#installation)
+ * [CUnit Tests](#cunit-tests)
+ * [Usage](#usage)
+ * [Example Usage and Tips](#example-usage-and-tips)
+ * [Recommended Resources](#recommended-resources)
+
+
+## Benefits
  * The payload can include Bash commands which can't be called natively through a system call in assembly.
  * Faster and less error-prone than handcrafting shellcode.
  * Generates shellcode for lengthy/complex Bash which would be difficult to do by hand.
@@ -14,19 +25,16 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 
 
 ## Limitations
-
  * The smallest possible shellcode may not be generated. Especially for specific commands as it embeds it inside an execve call, instead of calling natively through a system call.
 
 
 ## Installation
-
  * Ubuntu: __apt-get install gcc libc6-dev-i386 make__ - Needed to be able to compile C programs in 32bit architecture.
  * Arch: __pacman -Sy gcc lib32-gcc-libs lib32-glibc make__ - Needed to be able to compile C programs in 32 bit architecture.
  * __make__ - Compiles the generator `shellcode-generator.c` and outputs the binary to `shellcode-generator`.
 
 
 ## CUnit Tests
-
 In order to execute the unit tests using the CUnit framework you will need to install CUnit.
 
  * Ubuntu: __apt-get install libcunit1-dev__ - Needed to be able to compile CUnit framework tests.
@@ -39,7 +47,6 @@ In order to execute the unit tests using the CUnit framework you will need to in
  * __make payload__ Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.
 
 ## Example Usage and Tips
-
 Because of the techniques used to push strings whose length is not a multiple of four strings with no null bytes, the shellcode to push a non multiple can be larger than the shellcode to push a larger strings which is a multiple of four. Strings can be padded so as to not affect the behavior but make them a multiple of four.
 
 Below is an example to generate shellcode to call `/usr/bin/whoami`. Running `./build.sh` to build the output.c and execute it we can see the length of the shellcode is 39 bytes. As `/usr/bin/whoami` is 15 characters in length some techniques have to be used to push the non multiple.
