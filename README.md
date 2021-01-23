@@ -6,40 +6,38 @@ This program provides you with the utility to generate NASM x86 shellcode corres
 Embedded into a char * is the hexadecimal representation of the generated assembly in an outputted proof of concept C file 'output.c'. Alongside the hexadecimal representation is the NASM assembly equivalent as comments, to allow you to understand the generated code. You can ensure the generated assembly is functional and correct through compiling and executing the proof of concept C file. The Makefile has the utility 'make payload' to compile 'output.c' with the relevant flags to allow execution on the stack to prove the correctness.
 
 ## Benefits
-<ul>
-  <li>The payload can include Bash commands which can't be called natively through a system call in assembly.</li>
-  <li>Faster and less error-prone than handcrafting shellcode.</li>
-  <li>Generates shellcode for lengthy/complex Bash which would be difficult to do by hand.</li>
-  <li>Through the use of <b>./shellcode-generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.</li>
-</ul>
+
+ * The payload can include Bash commands which can't be called natively through a system call in assembly.
+ * Faster and less error-prone than handcrafting shellcode.
+ * Generates shellcode for lengthy/complex Bash which would be difficult to do by hand.
+ * Through the use of <b>./shellcode-generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.
+
 
 ## Limitations
-<ul>
-  <li>The smallest possible shellcode may not be generated. Especially for specific commands as it embeds it inside an execve call, instead of calling natively through a system call.</li>
-</ul>
+
+ * The smallest possible shellcode may not be generated. Especially for specific commands as it embeds it inside an execve call, instead of calling natively through a system call.
+
 
 ## Installation
 
-<ul>
-  <li>Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.</li>
-  <li>Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.</li>
-  <li><b>make</b> - Compiles the generator 'shellcode-generator.c' and outputs the binary to 'shellcode-generator'.</li>
-</ul>
+ * Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.
+ * Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.
+ * <b>make</b> - Compiles the generator 'shellcode-generator.c' and outputs the binary to 'shellcode-generator'.
+
 
 ## CUnit Tests
 
 In order to execute the unit tests using the CUnit framework you will need to install CUnit.
 
-<ul>
-  <li>Ubuntu: <b>apt-get install libcunit1-dev</b> - Needed to be able to compile CUnit framework tests.</li>
-  <li>Arch: <b>pacman -Sy cunit</b> - Needed to be able to compile CUnit framework tests.</li>
-  <li><b>make test</b> - Compiles the CUnit tests and runs then, printing the results to the terminal.</li>
-</ul>
+ * Ubuntu: <b>apt-get install libcunit1-dev</b> - Needed to be able to compile CUnit framework tests.
+ * Arch: <b>pacman -Sy cunit</b> - Needed to be able to compile CUnit framework tests.
+ * <b>make test</b> - Compiles the CUnit tests and runs then, printing the results to the terminal.
+
 
 ## Usage
 <ol>
-  <li><b>./shellcode-generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.</li>
-  <li><b>make payload</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.</li>
+ * <b>./shellcode-generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.
+ * <b>make payload</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.
 </ol>
 
 ## Example Usage and Tips
@@ -76,7 +74,6 @@ Below is a more complicated example, the usage of '/bin/bash -c "<cmds>"' allows
 
 The above example can be optimised. '/bin/bash' is 9 characters in length we could pad it with 3 '/'s to 12 a multiple of 4. But doing that produces longer shellcode than leaving it as '/bin/bash'. Spaces inside the command can be removed shortening the string length without affecting the command. Removing the spaces reduce it to 92 bytes in length, instead of the prior length of 97 bytes.
 
-
 <table>
   <tr>
     <th>./shellcode-generator /bin/bash -c "echo test>test.txt;ls;cat test.txt"</th>
@@ -85,8 +82,5 @@ The above example can be optimised. '/bin/bash' is 9 characters in length we cou
 </table>
 
 
-
 ## Recommended Resources
-<ul>
-  <li>http://insecure.org/stf/smashstack.html</li>
-</ul>
+ * http://insecure.org/stf/smashstack.html
