@@ -10,7 +10,7 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
  * The payload can include Bash commands which can't be called natively through a system call in assembly.
  * Faster and less error-prone than handcrafting shellcode.
  * Generates shellcode for lengthy/complex Bash which would be difficult to do by hand.
- * Through the use of <b>./shellcode-generator /bin/bash -c "<- commands ->"</b> you can execute multiple commands at once. Instead of singular command execution payload shellcode.
+ * Through the use of __./shellcode-generator /bin/bash -c "<- commands ->"__ you can execute multiple commands at once. Instead of singular command execution payload shellcode.
 
 
 ## Limitations
@@ -20,25 +20,23 @@ Embedded into a char * is the hexadecimal representation of the generated assemb
 
 ## Installation
 
- * Ubuntu: <b>apt-get install gcc libc6-dev-i386 make</b> - Needed to be able to compile C programs in 32bit architecture.
- * Arch: <b>pacman -Sy gcc lib32-gcc-libs lib32-glibc make</b> - Needed to be able to compile C programs in 32 bit architecture.
- * <b>make</b> - Compiles the generator 'shellcode-generator.c' and outputs the binary to 'shellcode-generator'.
+ * Ubuntu: __apt-get install gcc libc6-dev-i386 make__ - Needed to be able to compile C programs in 32bit architecture.
+ * Arch: __pacman -Sy gcc lib32-gcc-libs lib32-glibc make__ - Needed to be able to compile C programs in 32 bit architecture.
+ * __make__ - Compiles the generator 'shellcode-generator.c' and outputs the binary to 'shellcode-generator'.
 
 
 ## CUnit Tests
 
 In order to execute the unit tests using the CUnit framework you will need to install CUnit.
 
- * Ubuntu: <b>apt-get install libcunit1-dev</b> - Needed to be able to compile CUnit framework tests.
- * Arch: <b>pacman -Sy cunit</b> - Needed to be able to compile CUnit framework tests.
- * <b>make test</b> - Compiles the CUnit tests and runs then, printing the results to the terminal.
+ * Ubuntu: __apt-get install libcunit1-dev__ - Needed to be able to compile CUnit framework tests.
+ * Arch: __pacman -Sy cunit__ - Needed to be able to compile CUnit framework tests.
+ * __make test__ - Compiles the CUnit tests and runs then, printing the results to the terminal.
 
 
 ## Usage
-<ol>
- * <b>./shellcode-generator <- desired command -> <- arguments -></b> Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.
- * <b>make payload</b> Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.
-</ol>
+ * __./shellcode-generator <- desired command -> <- arguments ->__ Invokes the generator which takes the provide Bash command and arguments and generates the corresponding shellcode, outputting the result to output.c.
+ * __make payload__ Compiles output.c with the relevant flags for stack execution of the char * and then executes the outputted binary to prove the functionality of the shellcode.
 
 ## Example Usage and Tips
 
