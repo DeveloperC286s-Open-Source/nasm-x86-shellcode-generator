@@ -1,9 +1,9 @@
 stages:
   - conventional-commits-linting
-  - format
-  - warnings
-  - builds
-  - tests
+  - formatting
+  - linting
+  - compiling
+  - unit-testing
 
 
 conventional-commits-linting:
@@ -19,8 +19,8 @@ conventional-commits-linting:
     - if: $CI_MERGE_REQUEST_ID
 
 
-format:
-  stage: format
+formatting:
+  stage: formatting
   image: archlinux:base
   before_script:
     - pacman -Sy --noconfirm
@@ -34,8 +34,8 @@ format:
     - if: $CI_MERGE_REQUEST_ID
 
 
-warnings:
-  stage: warnings
+linting:
+  stage: linting
   image: archlinux:base
   before_script:
     - pacman -Sy --noconfirm
@@ -48,8 +48,8 @@ warnings:
     - if: $CI_MERGE_REQUEST_ID
 
 
-builds:
-  stage: builds
+compiling:
+  stage: compiling
   image: archlinux:base-devel
   before_script:
     - pacman -Sy --noconfirm
@@ -61,8 +61,8 @@ builds:
     - if: $CI_COMMIT_BRANCH == "master"
 
 
-tests:
-  stage: tests
+unit-testing:
+  stage: unit-testing
   image: archlinux:base-devel
   before_script:
     - pacman -Sy --noconfirm
