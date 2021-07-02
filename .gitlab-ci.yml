@@ -21,7 +21,7 @@ conventional-commits-linting:
 
 format:
   stage: format
-  image: archlinux/base
+  image: archlinux:base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S clang diffutils gawk grep --noconfirm
@@ -36,7 +36,7 @@ format:
 
 warnings:
   stage: warnings
-  image: archlinux/base
+  image: archlinux:base
   before_script:
     - pacman -Sy --noconfirm
     - pacman -S clang cunit gawk grep --noconfirm
@@ -50,15 +50,12 @@ warnings:
 
 builds:
   stage: builds
-  image: archlinux/base
+  image: archlinux:base-devel
   before_script:
     - pacman -Sy --noconfirm
-    - pacman -S base-devel lib32-gcc-libs lib32-glibc make --noconfirm
+    - pacman -S lib32-gcc-libs lib32-glibc make --noconfirm
   script:
     - make
-  artifacts:
-    paths:
-      - shellcode-generator
   rules:
     - if: $CI_MERGE_REQUEST_ID
     - if: $CI_COMMIT_BRANCH == "master"
@@ -66,10 +63,10 @@ builds:
 
 tests:
   stage: tests
-  image: archlinux/base
+  image: archlinux:base-devel
   before_script:
     - pacman -Sy --noconfirm
-    - pacman -S base-devel lib32-gcc-libs lib32-glibc make cunit --noconfirm
+    - pacman -S lib32-gcc-libs lib32-glibc make cunit --noconfirm
   script:
     - make test
   rules:
