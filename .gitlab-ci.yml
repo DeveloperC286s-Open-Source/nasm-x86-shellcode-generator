@@ -1,9 +1,22 @@
 stages:
+  - clean-git-history-checking
   - conventional-commits-linting
   - formatting
   - linting
   - compiling
   - unit-testing
+
+
+clean-git-history-checking:
+  stage: clean-git-history-checking
+  image: rust
+  before_script:
+    - cargo install clean_git_history
+  script:
+    # Check all the commits in the branch.
+    - /usr/local/cargo/bin/clean_git_history --from-reference "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
 
 conventional-commits-linting:
