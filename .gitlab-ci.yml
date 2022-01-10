@@ -54,7 +54,7 @@ linting:
     - pacman -S clang cunit gawk grep --noconfirm
   script:
     - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
-    - clang-tidy $i --checks="*,-llvmlibc-restrict-system-libc-headers" --warnings-as-errors="*"
+    - clang-tidy $i --checks="*,-llvmlibc-restrict-system-libc-headers,-altera-id-dependent-backward-branch,-altera-unroll-loops" --warnings-as-errors="*"
     - done
   rules:
     - if: $CI_MERGE_REQUEST_ID
