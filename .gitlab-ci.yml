@@ -38,7 +38,7 @@ formatting:
     - pacman -Sy --noconfirm
     - pacman -S clang diffutils gawk grep --noconfirm
   script:
-    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
+    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i "[.]c$" ); do
     - clang-format $i > temp.txt
     - cmp $i temp.txt
     - done
@@ -53,7 +53,7 @@ linting:
     - pacman -Sy --noconfirm
     - pacman -S clang cunit gawk grep --noconfirm
   script:
-    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i ".c$" ); do
+    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i "[.]c$" ); do
     - clang-tidy $i --checks="*,-llvmlibc-restrict-system-libc-headers,-altera-id-dependent-backward-branch,-altera-unroll-loops" --warnings-as-errors="*"
     - done
   rules:
