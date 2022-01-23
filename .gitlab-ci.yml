@@ -7,67 +7,56 @@ stages:
   - unit-testing
 
 
+services:
+  - docker:dind
+
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  EARTHLY_EXEC_CMD: "/bin/sh"
+
+
+image: earthly/earthly:v0.6.22
+
+
 clean-git-history-checking:
   stage: clean-git-history-checking
-  image: rust
-  before_script:
-    - cargo install clean_git_history
   script:
-    # Check all the commits in the branch.
-    - /usr/local/cargo/bin/clean_git_history --from-reference "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"
+    - earthly --ci +clean-git-history-checking --from "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"
   rules:
     - if: $CI_MERGE_REQUEST_ID
 
 
 conventional-commits-linting:
   stage: conventional-commits-linting
-  image: rust
-  before_script:
-    - cargo install conventional_commits_linter
   script:
-    # Lint all the commits in the branch.
-    - /usr/local/cargo/bin/conventional_commits_linter --from-reference "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" --allow-angular-type-only
+    - earthly --ci +conventional-commits-linting --from "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"
   rules:
     - if: $CI_MERGE_REQUEST_ID
 
 
 formatting:
   stage: formatting
-  image: archlinux:base
-  before_script:
-    - pacman -Sy --noconfirm
-    - pacman -S clang diffutils gawk grep --noconfirm
   script:
-    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i "[.]c$" ); do
-    - clang-format $i > temp.txt
-    - cmp $i temp.txt
-    - done
+    - earthly --ci +check-formatting
   rules:
     - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 linting:
   stage: linting
-  image: archlinux:base
-  before_script:
-    - pacman -Sy --noconfirm
-    - pacman -S clang cunit gawk grep --noconfirm
   script:
-    - for i in $( du -a src/ tests | awk '{print $2}' | grep -i "[.]c$" ); do
-    - clang-tidy $i --checks="*,-llvmlibc-restrict-system-libc-headers,-altera-id-dependent-backward-branch,-altera-unroll-loops" --warnings-as-errors="*"
-    - done
+    - earthly --ci +linting
   rules:
     - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 compiling:
   stage: compiling
-  image: archlinux:base-devel
-  before_script:
-    - pacman -Sy --noconfirm
-    - pacman -S lib32-gcc-libs lib32-glibc make --noconfirm
   script:
-    - make
+    - earthly --ci +compiling
   rules:
     - if: $CI_MERGE_REQUEST_ID
     - if: $CI_COMMIT_BRANCH == "master"
@@ -75,12 +64,8 @@ compiling:
 
 unit-testing:
   stage: unit-testing
-  image: archlinux:base-devel
-  before_script:
-    - pacman -Sy --noconfirm
-    - pacman -S lib32-gcc-libs lib32-glibc make cunit --noconfirm
   script:
-    - make test
+    - earthly --ci +unit-testing
   rules:
     - if: $CI_MERGE_REQUEST_ID
     - if: $CI_COMMIT_BRANCH == "master"
