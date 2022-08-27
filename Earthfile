@@ -39,7 +39,7 @@ fix-formatting:
 
 linting:
     FROM +clang-base
-    RUN find "./src" "./tests" -type f -name "*.c" | xargs -I {} clang-tidy --checks="*,-llvmlibc-restrict-system-libc-headers,-altera-id-dependent-backward-branch,-altera-unroll-loops" --warnings-as-errors="*" "{}"
+    RUN find "./src" "./tests" -type f -name "*.c" | xargs -I {} clang-tidy --checks="*,-llvmlibc-restrict-system-libc-headers,-altera-id-dependent-backward-branch,-altera-unroll-loops,-cert-err33-c" --warnings-as-errors="*" "{}"
 
 
 archlinux-base:
