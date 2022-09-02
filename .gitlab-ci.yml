@@ -16,7 +16,7 @@ variables:
   EARTHLY_EXEC_CMD: "/bin/sh"
 
 
-image: earthly/earthly:v0.6.22
+image: earthly/earthly
 
 
 clean-git-history-checking:
