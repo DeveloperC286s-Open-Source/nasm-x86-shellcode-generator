@@ -13,5 +13,7 @@ jobs:
         run: git clone --mirror "https://github.com/${GITHUB_REPOSITORY}.git" "${GITHUB_WORKSPACE}"
       - name: Get GitLab repository.
         run: echo "REPOSITORY_NAME=$(echo "${GITHUB_REPOSITORY}" | sed "s|^${GITHUB_REPOSITORY_OWNER}/||g")" >> "${GITHUB_ENV}"
+      - name: see refs
+        run: git show-ref
       - name: Mirroring.
         run: git push --mirror "https://oauth2:${{ secrets.GITLAB_PERSONAL_ACCESS_TOKEN }}@gitlab.com/DeveloperC/${REPOSITORY_NAME}"
