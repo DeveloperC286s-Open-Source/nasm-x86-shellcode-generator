@@ -38,3 +38,15 @@ check-github-actions-workflows-linting:
     RUN go install github.com/rhysd/actionlint/cmd/actionlint@v1.6.26
     DO +COPY_CI_DATA
     RUN ./ci/check-github-actions-workflows-linting.sh
+
+
+COPY_SOURCECODE:
+    COMMAND
+    DO +COPY_CI_DATA
+    COPY --dir "src/" "tests/" "./"
+
+
+compile:
+    FROM gcc:13.2.0
+    DO +COPY_SOURCECODE
+    RUN ./ci/compile.sh
