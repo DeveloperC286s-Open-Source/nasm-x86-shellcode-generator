@@ -25,6 +25,14 @@ check-clean-git-history:
     RUN ./ci/check-clean-git-history.sh --from-reference "${from_reference}"
 
 
+check-conventional-commits-linting:
+    FROM +rust-base
+    RUN cargo install conventional_commits_linter --version 0.12.3 --locked
+    DO +COPY_METADATA
+    ARG from_reference="origin/HEAD"
+    RUN ./ci/check-conventional-commits-linting.sh --from-reference "${from_reference}"
+
+
 check-github-actions-workflows-linting:
     FROM golang:1.20.13
     RUN go install github.com/rhysd/actionlint/cmd/actionlint@v1.6.26
