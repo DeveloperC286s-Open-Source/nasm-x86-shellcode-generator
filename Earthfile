@@ -33,8 +33,34 @@ check-conventional-commits-linting:
     RUN ./ci/check-conventional-commits-linting.sh --from-reference "${from_reference}"
 
 
-check-github-actions-workflows-linting:
+golang-base:
     FROM golang:1.20.13
+    ENV GOPROXY=direct
+    ENV CGO_ENABLED=0
+    ENV GOOS=linux
+    ENV GOARCH=amd64
+
+
+yaml-formatting-base:
+    FROM +golang-base
+    RUN go install github.com/google/yamlfmt/cmd/yamlfmt@v0.10.0
+    COPY ".yamlfmt" "./"
+    DO +COPY_CI_DATA
+
+
+check-yaml-formatting:
+    FROM +yaml-formatting-base
+    RUN ./ci/check-yaml-formatting.sh
+
+
+fix-yaml-formatting:
+    FROM +yaml-formatting-base
+    RUN ./ci/fix-yaml-formatting.sh
+    SAVE ARTIFACT ".github/" AS LOCAL "./"
+
+
+check-github-actions-workflows-linting:
+    FROM +golang-base
     RUN go install github.com/rhysd/actionlint/cmd/actionlint@v1.6.26
     DO +COPY_CI_DATA
     RUN ./ci/check-github-actions-workflows-linting.sh
