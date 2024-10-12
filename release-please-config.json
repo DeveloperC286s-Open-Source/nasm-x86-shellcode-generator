@@ -1,0 +1,8 @@
+{
+  "changelog-type": "github",
+  "release-type": "simple",
+  "pull-request-title-pattern": "chore: release ${version}",
+  "packages": {
+    ".": {}
+  }
+}
