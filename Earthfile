@@ -20,15 +20,8 @@ alpine-base:
     WORKDIR "/nasm-x86-shellcode-generator"
 
 
-rust-base:
-    FROM +alpine-base
-    # renovate: datasource=repology depName=alpine_3_20/rust versioning=loose
-    ENV RUST_VERSION="1.78.0-r0"
-    RUN apk add --no-cache cargo=$RUST_VERSION
-
-
 check-clean-git-history:
-    FROM +rust-base
+    FROM +alpine-base
     # renovate: datasource=github-releases depName=DeveloperC286/clean_git_history
     ENV CLEAN_GIT_HISTORY_VERSION="v0.2.0"
     RUN wget -O - "https://github.com/DeveloperC286/clean_git_history/releases/download/${CLEAN_GIT_HISTORY_VERSION}/x86_64-unknown-linux-musl.gz" | gzip -d > /usr/bin/clean_git_history && chmod 755 /usr/bin/clean_git_history
@@ -38,7 +31,7 @@ check-clean-git-history:
 
 
 check-conventional-commits-linting:
-    FROM +rust-base
+    FROM +alpine-base
     # renovate: datasource=github-releases depName=DeveloperC286/conventional_commits_linter
     ENV CONVENTIONAL_COMMITS_LINTER_VERSION="v0.13.0"
     RUN wget -O - "https://github.com/DeveloperC286/conventional_commits_linter/releases/download/${CONVENTIONAL_COMMITS_LINTER_VERSION}/x86_64-unknown-linux-musl.gz" | gzip -d > /usr/bin/conventional_commits_linter && chmod 755 /usr/bin/conventional_commits_linter
@@ -88,6 +81,11 @@ COPY_SOURCECODE:
 
 
 compile:
-    FROM +rust-base
+    FROM +alpine-base
+    # renovate: datasource=repology depName=alpine_3_20/gcc versioning=loose
+    ENV GCC_VERSION="13.2.1_git20240309-r0"
+    # renovate: datasource=repology depName=alpine_3_20/musl-dev versioning=loose
+    ENV MUSL_VERSION="1.2.5-r0"
+    RUN apk add --no-cache gcc=$GCC_VERSION musl-dev=$MUSL_VERSION
     DO +COPY_SOURCECODE
     RUN ./ci/compile.sh
