@@ -85,7 +85,7 @@ compile:
     # renovate: datasource=repology depName=alpine_3_20/gcc versioning=loose
     ENV GCC_VERSION="13.2.1_git20240309-r0"
     # renovate: datasource=repology depName=alpine_3_20/musl-dev versioning=loose
-    ENV MUSL_VERSION="1.2.5-r0"
+    ENV MUSL_VERSION="1.2.5-r1"
     RUN apk add --no-cache gcc=$GCC_VERSION musl-dev=$MUSL_VERSION
     DO +COPY_SOURCECODE
     RUN ./ci/compile.sh
